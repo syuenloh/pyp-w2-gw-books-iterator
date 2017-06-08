@@ -71,6 +71,7 @@ class BookIterator(object):
     def __iter__(self):
         if not self.file_obj or self.file_obj.closed:
             self.file_obj = open(self.file_path, 'r')
+        self.file_obj.seek(0)
         return self
 
     def __next__(self):

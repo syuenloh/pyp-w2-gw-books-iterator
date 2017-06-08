@@ -1,8 +1,7 @@
 import unittest
-import pytest as pyt
 from decimal import Decimal
 
-from main import Price, Book, BookIterator
+from books_iterator.main import Price
 
 
 class PriceTestCase(unittest.TestCase):
@@ -57,18 +56,3 @@ class PriceTestCase(unittest.TestCase):
     def test_price_equality_currencies(self):
         self.assertEqual(
             Price(Decimal('11.3'), 'USD'), Price(Decimal('10'), 'EUR'))
-
-
-class BookIteratorTestCase(unittest.TestCase):
-    def test_book_api(self):
-        b1 = Book('Harry Potter', 'J. K. Rowling', Decimal('20.00'), 'USD')
-        self.assertEqual(b1.price, Price(Decimal('20.00'), 'USD'))
-        self.assertEqual(
-            str(b1), 'Harry Potter (by J. K. Rowling) - USD$20.00')
-
-    def test_book_iteration(self):
-        books_iterator = BookIterator('books.csv')
-        self.assertEqual(len([b for b in books_iterator]), 7)
-        for book in books_iterator:
-            self.assertEqual(isinstance(book, Book))
-            self.assertEqual(isinstance(book.price, Price))
