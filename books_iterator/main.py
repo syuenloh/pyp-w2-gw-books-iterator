@@ -6,19 +6,19 @@ class Book(object):
         # initialize attributes
         self.title = title
         self.authors = authors
-        self.prince_amount = prince_amount
+        self.price_amount = price_amount
         self.price_currency = price_currency
 
     @property
     def price(self):
         # create an instance of `Price`, using the book's attributes
-        return Price(self.prince_amount, self.price_currency)
+        return Price(self.price_amount, self.price_currency)
 
     def __str__(self):
         # check the string format in the unit tests
         return "{title} (by {authors}) - {currency}${price}".format(
             title=self.title, authors=self.authors,
-            currency=self.price_currency, price=self.prince_amount)
+            currency=self.price_currency, price=self.price_amount)
 
 
 class Price(object):
