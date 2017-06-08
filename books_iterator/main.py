@@ -2,7 +2,7 @@ from decimal import Decimal
 
 
 class Book(object):
-    def __init__(self, title, authors, prince_amount, price_currency):
+    def __init__(self, title, authors, price_amount, price_currency):
         # initialize attributes
         self.title = title
         self.authors = authors

@@ -11,7 +11,7 @@ Here's how the `Book` class looks like:
 >>>
 >>> book = Book(title='Harry Potter',
                 authors='J. K. Rowling',
-                prince_amount=Decimal('10.00'),
+                price_amount=Decimal('10.00'),
                 prince_currency='USD')
 >>>
 >>> print(book)
