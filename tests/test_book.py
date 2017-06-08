@@ -10,7 +10,7 @@ class BookTestCase(unittest.TestCase):
         b1 = Book('Harry Potter', 'J. K. Rowling', Decimal('20.00'), 'USD')
         self.assertEqual(b1.title, 'Harry Potter')
         self.assertEqual(b1.authors, 'J. K. Rowling')
-        self.assertEqual(b1.prince_amount, Decimal('20.00'))
+        self.assertEqual(b1.price_amount, Decimal('20.00'))
         self.assertEqual(b1.price_currency, 'USD')
 
     def test_book_price(self):
