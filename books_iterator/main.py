@@ -4,16 +4,21 @@ from decimal import Decimal
 class Book(object):
     def __init__(self, title, authors, prince_amount, price_currency):
         # initialize attributes
-        pass
+        self.title = title
+        self.authors = authors
+        self.prince_amount = prince_amount
+        self.price_currency = price_currency
 
     @property
     def price(self):
         # create an instance of `Price`, using the book's attributes
-        pass
+        return Price(self.prince_amount, self.price_currency)
 
     def __str__(self):
         # check the string format in the unit tests
-        pass
+        return "{title} (by {authors}) - {currency}${price}".format(
+            title=self.title, authors=self.authors,
+            currency=self.price_currency, price=self.prince_amount)
 
 
 class Price(object):
@@ -33,47 +38,63 @@ class Price(object):
     }
 
     def __init__(self, amount, currency='USD'):
-        pass
+        self.amount = amount
+        self.currency = currency
 
     def __str__(self):
-        pass
+        return '{} {}'.format(self.currency, self.amount)
 
     def get_currency(self):
-        pass
+        return self.currency
 
     def __add__(self, other):
         # return a new `Price` instance, representing the sum of
         # both given ones
-        pass
+        other_amount = other.get_value(self.currency)
+        return Price(self.amount + other_amount, self.currency)
 
     def __eq__(self, other):
         # compare if two prices are equal. Keep in mind that both prices
         # might have different currencies. Use the `.get_value()` function
         # to transform prices to a comparable currency.
-        pass
+        other_amount = other.get_value(self.currency)
+        return self.amount == other_amount
 
     def __ne__(self, other):
         # opposite to __eq__
-        pass
+        return not (self == other)
 
     def get_value(self, currency=None):
         # if no currency is given, returns the current price amount. If a
         # different currency is given, handles the price convertion to the
         # given currency. Use the `EXCHANGE_RATES` dict for that.
-        pass
+        if not currency or currency == self.currency:
+            return self.amount
+
+        exchange_rate = self.EXCHANGE_RATES[self.currency][currency]
+        return self.amount * exchange_rate
 
 
 class BookIterator(object):
     def __init__(self, file_path):
-        pass
+        self.file_path = file_path
+        self.file_obj = None
 
     def __iter__(self):
-        pass
+        if not self.file_obj or self.file_obj.closed:
+            self.file_obj = open(self.file_path, 'r')
+        self.file_obj.seek(0)
+        return self
 
     def __next__(self):
         # make sure each execution of __next__ returns an instance
         # of the `Book` class.
-        pass
+        line = self.file_obj.readline()
+        if not line:
+            raise StopIteration()
+        book_data = [l.strip() for l in line.split(',')]
+        book = Book(*book_data)
+        return book
 
     next = __next__
 
