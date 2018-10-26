@@ -1,6 +1,5 @@
 from decimal import Decimal
 
-
 class Book(object):
     def __init__(self, title, authors, price_amount, price_currency):
         # initialize attributes
@@ -22,6 +21,7 @@ class Book(object):
 
 
 class Price(object):
+
     EXCHANGE_RATES = {
         'USD': {
             'EUR': Decimal('0.89'),
@@ -36,6 +36,7 @@ class Price(object):
             'EUR': Decimal('0.0081')
         },
     }
+
 
     def __init__(self, amount, currency='USD'):
         self.amount=amount
@@ -53,7 +54,7 @@ class Price(object):
         if self.currency==other.currency:
             sum_amount=self.amount+other.amount
         else: 
-            sum_amount=self.amount+other.amount/EXCHANGE_RATES[self.currency][other.currency]
+            sum_amount=self.amount+other.get_value(other.currency)
         return Price(sum_amount,self.currency)
 
     def __eq__(self, other):
@@ -63,14 +64,16 @@ class Price(object):
         if self.currency==other.currency and self.amount==other.amount:
             return True
         elif self.currency!=other.currency:
-            return self.amount==other.get_value(self.currency)
+            if self.amount==other.get_value(self.currency):
+                return True
 
     def __ne__(self, other):
         # opposite to __eq__
         if self.currency==other.currency and self.amount==other.amount:
             return True
         elif self.currency!=other.currency:
-            return self.amount==other.get_value(self.currency)
+            if self.amount==other.get_value(self.currency):
+                return True
 
     def get_value(self, currency=None):
         # if no currency is given, returns the current price amount. If a
@@ -78,12 +81,12 @@ class Price(object):
         # given currency. Use the `EXCHANGE_RATES` dict for that.
         if not currency:
             return self.amount
-        elif currency=='USD':
-            return Decimal(self.amount*EXCHANGE_RATES[self.currency]['USD'])
+        if currency=='USD':
+            return Decimal(self.amount*(EXCHANGE_RATES[self.currency]['USD']))
         elif currency=='EUR':
-            return Decimal(self.amount*EXCHANGE_RATES[self.currency]['EUR'])
+            return Decimal(self.amount*(EXCHANGE_RATES[self.currency]['EUR']))
         elif currency=='YEN':
-            return Decimal(self.amount*EXCHANGE_RATES[self.currency]['YEN'])
+            return Decimal(self.amount*(EXCHANGE_RATES[self.currency]['YEN']))
 
 
 class BookIterator(object):
@@ -98,7 +101,7 @@ class BookIterator(object):
     def __next__(self):
         # make sure each execution of __next__ returns an instance
         # of the `Book` class.
-        if self.index>=len(lst):
+        if self.index>=len(self.books):
             raise StopIteration
         book=self.books[self.index]
         self.index+=1

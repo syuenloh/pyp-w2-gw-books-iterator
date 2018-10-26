@@ -1,7 +1,7 @@
 import unittest
 from decimal import Decimal
 
-from books_iterator.main import Price
+from books_iterator.main import Book, Price, BookIterator
 
 
 class PriceTestCase(unittest.TestCase):
