@@ -1,11 +1,5 @@
 import unittest
 from decimal import Decimal
-
-import unittest
-from decimal import Decimal
-
-from books_iterator.main import Book, Price
-
 from books_iterator.main import Book, Price, BookIterator
 
 
