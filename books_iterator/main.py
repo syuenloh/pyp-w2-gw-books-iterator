@@ -54,7 +54,7 @@ class Price(object):
         if self.currency==other.currency:
             sum_amount=self.amount+other.amount
         else: 
-            sum_amount=self.amount+other.get_value(other.currency)
+            sum_amount=self.amount+other.get_value(self.currency)
         return Price(sum_amount,self.currency)
 
     def __eq__(self, other):
@@ -82,30 +82,25 @@ class Price(object):
         if not currency:
             return self.amount
         if currency=='USD':
-            return Decimal(self.amount*(EXCHANGE_RATES[self.currency]['USD']))
+            return Decimal(self.amount*(self.EXCHANGE_RATES[self.currency]['USD']))
         elif currency=='EUR':
-            return Decimal(self.amount*(EXCHANGE_RATES[self.currency]['EUR']))
+            return Decimal(self.amount*(self.EXCHANGE_RATES[self.currency]['EUR']))
         elif currency=='YEN':
-            return Decimal(self.amount*(EXCHANGE_RATES[self.currency]['YEN']))
+            return Decimal(self.amount*(self.EXCHANGE_RATES[self.currency]['YEN']))
 
 
 class BookIterator(object):
     def __init__(self, file_path):
-        self.index=0
         self.file_path=file_path
-        self.books=[Book(x[0],x[1],x[2],x[3]) for x in read_file_line_by_line(self.file_path)]
+        self.items=[Book(x[0],x[1],x[2],x[3]) for x in read_file_line_by_line(self.file_path)]
 
     def __iter__(self):
-        return self
+        return iter(self.items)
 
     def __next__(self):
         # make sure each execution of __next__ returns an instance
         # of the `Book` class.
-        if self.index>=len(self.books):
-            raise StopIteration
-        book=self.books[self.index]
-        self.index+=1
-        return book
+        return next(self.__iter__)
 
     next = __next__
 
