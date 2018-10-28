@@ -93,14 +93,21 @@ class BookIterator(object):
     def __init__(self, file_path):
         self.file_path=file_path
         self.items=[Book(x[0],x[1],x[2],x[3]) for x in read_file_line_by_line(self.file_path)]
+        self.max=len(self.items)
 
     def __iter__(self):
-        return iter(self.items)
+        self.index=0
+        return self
 
     def __next__(self):
         # make sure each execution of __next__ returns an instance
         # of the `Book` class.
-        return next(self.__iter__)
+        if self.index < self.max:
+            book = self.items[self.index]
+            self.index += 1
+            return book
+        else:
+            raise StopIteration
 
     next = __next__
 
